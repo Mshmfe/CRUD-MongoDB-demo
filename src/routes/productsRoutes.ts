@@ -9,12 +9,16 @@ import getAllProduct, {
 } from "../controllers/productController";
 
 const router = Router();
-
+//GET->/products -> :for get all the product
 router.get("/", getAllProduct);
-router.get("/:id", getSingleProduct);
+//GET->/products/:slug ->for get single product
+router.get("/:slug", getSingleProduct);
+//POST->for create new  product
 router.post("/", createSingleProduct);
-router.delete("/:id", deleteSingleProduct);
-router.put("/:id", updateSingleProduct);
+//DELETE->/products/:slug ->for delete single product
+router.delete("/:slug", deleteSingleProduct);
+//PUT->/products/:slug ->for update single product
+router.put("/:slug", updateSingleProduct);
 
 
 export default router;
