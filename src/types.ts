@@ -1,7 +1,17 @@
 export type Product = {
-  id: string;
+  _id: string;
   name: string;
-  price: number; 
-};
+  price: number;
+  slug: string;
+  description: string;
+  sold: number;
+  quantity: number;
+  createdAt?:NativeDate;
+  updatedAt?:NativeDate;
 
-export type productInput = Omit<Product, "id">;
+};
+export type productInput = Omit<Product, " slug">;
+export interface Error {
+  status?: number;
+  message?: string;
+}

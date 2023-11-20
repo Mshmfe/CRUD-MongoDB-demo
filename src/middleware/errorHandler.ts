@@ -1,13 +1,15 @@
 import { Request, Response, NextFunction } from "express";
 
+//now i use the interface because when i try to use  status the error is not know about the status and that give me the error in my code  
+import { Error } from "../types";
+
 export const errorHandler = (
   error: Error,
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const status = res.statusCode !== 200 ? res.statusCode : 200;
-  res.status(status).json({
-    message:error.message,
+  return res.status(error.status || 500).send({
+    message: error.message,
   });
 };

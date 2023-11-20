@@ -2,7 +2,9 @@ import { Request, Response, NextFunction } from "express";
 import slugify from "slugify";
 
 import { productModel } from "../models/productsSchema";
-import { productInput } from "../types";
+import { Product, productInput } from "../types";
+import { createHttpError } from "../utility/createError";
+import { findProductBySlug, getProduct } from "../services/productService";
 
 const getAllProduct = async (
   req: Request,
@@ -12,32 +14,16 @@ const getAllProduct = async (
   try {
     //now i find the product by using find function now i can for pagenation pass the limit
     //for pagenation i need 2 thing 1- the limit 2-the page number
-    let page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || 3;
-
-    //find how many product (document ) i have
-    const count = await productModel.countDocuments();
-    console.log("document number:", count);
-    //total page
-    const totalPage = Math.ceil(count / limit);
-    console.log("total page number:", totalPage);
-
-    if (page > totalPage) {
-      page = totalPage;
-    }
-    //i want to skip the page number 1 and go for the product in the number 2
-    const skip = (page - 1) * limit;
-
-    //current page
-
-    // to get all the product by use find function
-    const products = await productModel.find().skip(skip).limit(limit);
+    let page = Number(req.query.page);
+    const limit = Number(req.query.limit);
+    //the service for get all the product
+   let{ products, totalPage, currentPage } = await getProduct(page, limit);
     res.json({
       message: "all product are returned",
       payload: {
         products,
         totalPage,
-        currentPage: page,
+        currentPage,
       },
     });
   } catch (error) {
@@ -60,7 +46,11 @@ export const createSingleProduct = async (
     //check if the product exisist or not
     const productExists = await productModel.exists({ name });
     if (productExists) {
-      throw new Error("Product already exist with this name");
+      const error = createHttpError(
+        404,
+        "Product already exist with this name"
+      );
+      throw error;
     }
     const product = new productModel({
       name,
@@ -92,10 +82,8 @@ export const getSingleProduct = async (
     //i want to get the single product dased on the slug from req.params
     // find the product from the database
     const { slug } = req.params;
-    const product = await productModel.find({ slug });
-    if (product.length == 0) {
-      throw new Error(`Product is not found with this slug: ${slug}`);
-    }
+    //service for get single product
+    const product = await findProductBySlug(slug)
     res.json({
       message: "single product are returend",
       paylaod: product,
@@ -112,9 +100,13 @@ export const deleteSingleProduct = async (
 ) => {
   try {
     const { slug } = req.params;
-    const response = await productModel.findOneAndDelete({ slug });
-    if (!response) {
-      throw new Error(`Product is not found with this slug: ${slug}`);
+    const product = await productModel.findOneAndDelete({ slug });
+    if (!product) {
+      const error = createHttpError(
+        404,
+        `Product is not found with this slug: ${slug}`
+      );
+      throw error;
     }
     res.json({
       message: "single product is dleted",
@@ -141,7 +133,11 @@ export const updateSingleProduct = async (
       new: true,
     });
     if (!product) {
-      throw new Error(`Product is not found with this id: ${slug}`);
+      const error = createHttpError(
+        404,
+        `Product is not found with this id: ${slug}`
+      );
+      throw error;
     }
     res.json({
       message: " product is updated",
