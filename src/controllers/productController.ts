@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import slugify from "slugify";
 
 import { productModel } from "../models/productsSchema";
-import { Product, productInput } from "../types";
+import { productInput } from "../types";
 import { createHttpError } from "../utility/createError";
 import { findProductBySlug, getProduct } from "../services/productService";
 

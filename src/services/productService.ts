@@ -1,4 +1,3 @@
-import { Response,Request,NextFunction } from "express";
 import { productModel } from "../models/productsSchema";
 import { createHttpError } from "../utility/createError";
 
