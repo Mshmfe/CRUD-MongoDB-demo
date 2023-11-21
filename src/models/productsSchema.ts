@@ -36,6 +36,9 @@ export const productsSchema = new Schema(
       required: true,
       trim: true,
     },
+    //to make relation between product to the category
+    //Schema.Types.ObjectId the id from the collection of category
+    category: { type: Schema.Types.ObjectId, ref: "Category" ,required:true},
   },
   { timestamps: true }
 );

@@ -4,7 +4,7 @@ import slugify from "slugify";
 import { productModel } from "../models/productsSchema";
 import { productInput } from "../types";
 import { createHttpError } from "../utility/createError";
-import { findProductBySlug, getProduct } from "../services/productService";
+import { deleteProductBySlug, findProductBySlug, getProduct } from "../services/productService";
 
 const getAllProduct = async (
   req: Request,
@@ -38,7 +38,7 @@ export const createSingleProduct = async (
 ) => {
   try {
     //get the data from req.body
-    const { name, price, description, sold, quantity } = req.body;
+    const { name, price, description, sold, quantity,category  } = req.body;
     //if i want to create new product i need name and price
     //now i create a new product with name and price
     //i can just write req.body which means any data come from req.body i want to craete product based on this data
@@ -59,6 +59,7 @@ export const createSingleProduct = async (
       description,
       sold,
       quantity,
+      category,
     });
     //now i need to save my new product inside the database by use save function
     //maybe this process take some time so we need to used await
@@ -100,14 +101,8 @@ export const deleteSingleProduct = async (
 ) => {
   try {
     const { slug } = req.params;
-    const product = await productModel.findOneAndDelete({ slug });
-    if (!product) {
-      const error = createHttpError(
-        404,
-        `Product is not found with this slug: ${slug}`
-      );
-      throw error;
-    }
+    //service for delete single product
+    await deleteProductBySlug(slug);
     res.json({
       message: "single product is dleted",
     });
@@ -135,7 +130,7 @@ export const updateSingleProduct = async (
     if (!product) {
       const error = createHttpError(
         404,
-        `Product is not found with this id: ${slug}`
+        `Product is not found with this slug: ${slug}`
       );
       throw error;
     }

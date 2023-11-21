@@ -19,7 +19,9 @@ export const getProduct = async (page = 1, limit = 3) => {
   //current page
 
   // to get all the product by use find function
-  const products = await productModel.find().skip(skip).limit(limit);
+  //populate('category') for get the information of category when i try get the product
+  //populate the data from the category model
+  const products = await productModel.find().populate('category').skip(skip).limit(limit);
   return {
     products,
     totalPage,
@@ -43,4 +45,20 @@ export const findProductBySlug=async(slug:string)=>{
         }
        return product
 }
-//
+//DELETE ->delete single product 
+export const deleteProductBySlug=async(slug:string)=>{
+   
+  //i want to get the single product dased on the slug from req.params
+  // find the product from the database
+  
+  const product = await productModel.findOneAndDelete({ slug });
+  if (!product) {
+    const error = createHttpError(
+      404,
+      `Product is not found with this slug: ${slug}`
+    );
+    throw error;
+  }
+ return product
+}
+
