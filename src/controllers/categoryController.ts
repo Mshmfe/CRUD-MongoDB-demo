@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import slugify from "slugify";
 
-import { categoryModel } from "../models/categorySchema";
-import { createHttpError } from "../utility/createError";
+
 import {
     createSingleCategory,
   deleteCategory,
@@ -43,15 +42,11 @@ export const createCategory = async (
     //i can just write req.body which means any data come from req.body i want to craete product based on this data
     //also product knows about the data in schema
     //check if the product exisist or not
-   await createSingleCategory(name)
-    const category = new categoryModel({
-      name,
-      slug: slugify(name),
-    });
+   const category=await createSingleCategory(name)
+    
     //now i need to save my new product inside the database by use save function
     //maybe this process take some time so we need to used await
     // await product.save()-->like when i  push some data from req.body
-    await category.save();
     res.status(201).json({
       message: "single category created.",
       payload: category,

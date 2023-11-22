@@ -2,7 +2,7 @@ import { Router } from "express";
 import { createCategory, deleteSingleCategory, getAllCategory, getSingleCategory, updateCategory } from "../controllers/categoryController";
 
 const router=Router();
-//GE->/category=for get all the category
+//GET->/category=for get all the category
 router.get('/',getAllCategory);
 
 router.get('/:slug',getSingleCategory);

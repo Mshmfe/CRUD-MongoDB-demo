@@ -1,14 +1,15 @@
 import slugify from "slugify";
-import { categoryModel } from "../models/categorySchema";
-import { createHttpError } from "../utility/createError";
 import { Request } from "express";
+
+import { ICategory, categoryModel } from "../models/categorySchema";
+import { createHttpError } from "../utility/createError";
 
 export const getCategory=async()=>{
     const category = await categoryModel.find();
     return category
 };
 
-export const deleteCategory=async(slug:string)=>{
+export const deleteCategory=async(slug:string):Promise<ICategory>=>{
     const category = await categoryModel.findOneAndDelete({ slug });
     if (!category) {
       const error = createHttpError(
@@ -20,9 +21,9 @@ export const deleteCategory=async(slug:string)=>{
 return category
 }
 
-export const getCategoryBySlug=async(slug:string)=>{
-    const category = await categoryModel.find({ slug });
-      if (category.length == 0) {
+export const getCategoryBySlug=async(slug:string):Promise<ICategory>=>{
+    const category = await categoryModel.findOne({ slug });
+      if (!category) {
         const error = createHttpError(
           404,
           `category is not found with this slug: ${slug}`
@@ -32,7 +33,7 @@ export const getCategoryBySlug=async(slug:string)=>{
       return category  
 };
 
-export const updateSingleCategory=async(slug:string,req:Request)=>{
+export const updateSingleCategory=async(slug:string,req:Request):Promise<ICategory>=>{
     if (req.body.name) {
         req.body.slug = slugify(req.body.name);
       }
@@ -46,7 +47,7 @@ export const updateSingleCategory=async(slug:string,req:Request)=>{
        throw error;
      }return category
 }
-
+//not sure
 export const createSingleCategory=async(name:string)=>{
     const categoryExists = await categoryModel.exists({ name });
     if (categoryExists) {
@@ -56,6 +57,11 @@ export const createSingleCategory=async(name:string)=>{
       );
       throw error;
     }
+    const category = new categoryModel({
+      name,
+      slug: slugify(name),
+    })
+    await category.save()
     
-    return categoryExists
+    return category
 }

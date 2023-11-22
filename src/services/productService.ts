@@ -35,8 +35,9 @@ export const findProductBySlug=async(slug:string)=>{
         //i want to get the single product dased on the slug from req.params
         // find the product from the database
         // const { slug } = req.params;
-        const product = await productModel.find({ slug:slug });
-        if (product.length == 0) {
+        const product = await productModel.findOne({ slug:slug });
+        //because i use findOne not find in this case is not aray any more 
+        if (!product) {
           const error = createHttpError(
             404,
             `Product is not found with this slug: ${slug}`
