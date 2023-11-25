@@ -31,5 +31,3 @@ app.use((req, res, next) => {
 app.use(errorHandler);
 
 
-// "ts-watch": "tsc -w",
-//     "start": "nodemon  src/server.ts"

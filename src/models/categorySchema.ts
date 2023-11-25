@@ -9,8 +9,7 @@ export interface ICategory extends Document{
       type: String,
       require: true,
       trim: true,
-      minlength: [3, "Category name must be at least 3 characters long"],
-      maxlength: [100, "Category name must be at most 100 characters "],
+      
     },
     slug: {
       type: String,
@@ -22,3 +21,4 @@ export interface ICategory extends Document{
 );
 
 export const categoryModel = model<ICategory>("Category", categorySchema);
+

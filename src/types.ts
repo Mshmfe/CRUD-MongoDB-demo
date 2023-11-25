@@ -15,3 +15,11 @@ export interface Error {
   status?: number;
   message?: string;
 }
+export type Category = {
+  _id: string;
+  name: string;
+  slug: string;
+  
+
+};
+export type categoryInput = Omit<Category, " _id">;

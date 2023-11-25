@@ -1,8 +1,20 @@
+import { Document } from "mongoose";
 import { Schema, model } from "mongoose";
 
+import { ICategory } from "./categorySchema";
+export interface IProduct extends Document {
+  name: string;
+  slug: string;
+  price: number;
+  description: string;
+  sold: number;
+  quantity: number;
+  category: ICategory["_id"];
+  image: string;
+}
 export const productsSchema = new Schema(
   {
-    //image,category
+    
     name: {
       type: String,
       required: true,
@@ -28,7 +40,7 @@ export const productsSchema = new Schema(
     },
     sold: {
       type: Number,
-      required: true,
+      default: 0,
       trim: true,
     },
     quantity: {
@@ -36,9 +48,14 @@ export const productsSchema = new Schema(
       required: true,
       trim: true,
     },
+    image: {
+      type: String,
+      // ! typo error shoud be public not puplic
+      default: "puplic/images/products/default.png",
+    },
     //to make relation between product to the category
     //Schema.Types.ObjectId the id from the collection of category
-    category: { type: Schema.Types.ObjectId, ref: "Category" ,required:true},
+    category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
   },
   { timestamps: true }
 );
@@ -48,4 +65,4 @@ export const productsSchema = new Schema(
 // is like the collection when i create collection =>db.createCollection('products')
 //this collection "Products" will follow 1 schema called "productsSchema"
 //o will use this schema everywhere so we need to exported i will use this model when i want to make crud operation on products
-export const productModel = model("Products", productsSchema);
+export const productModel = model<IProduct>("Products", productsSchema);

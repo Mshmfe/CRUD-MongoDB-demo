@@ -1,5 +1,7 @@
-import { productModel } from "../models/productsSchema";
+import { NextFunction, Request, Response } from "express";
+import { IProduct, productModel } from "../models/productsSchema";
 import { createHttpError } from "../utility/createError";
+import slugify from "slugify";
 
 //GET->get all the product
 export const getProduct = async (page = 1, limit = 3) => {
@@ -30,7 +32,7 @@ export const getProduct = async (page = 1, limit = 3) => {
 };
 
 //GET=>get single product
-export const findProductBySlug=async(slug:string)=>{
+export const findProductBySlug=async(slug:string):Promise<IProduct>=>{
    
         //i want to get the single product dased on the slug from req.params
         // find the product from the database
@@ -47,7 +49,7 @@ export const findProductBySlug=async(slug:string)=>{
        return product
 }
 //DELETE ->delete single product 
-export const deleteProductBySlug=async(slug:string)=>{
+export const deleteProductBySlug=async(slug:string):Promise<IProduct>=>{
    
   //i want to get the single product dased on the slug from req.params
   // find the product from the database
@@ -63,3 +65,23 @@ export const deleteProductBySlug=async(slug:string)=>{
  return product
 }
 
+export const updateProductServices=async(req:Request,slug:string):Promise<IProduct>=>{
+  if (req.body.name) {
+    //update the slug value
+    req.body.slug = slugify(req.body.name);
+  }
+  
+  const updateData = req.body;
+  //in this function i base 2 things 1- is id 2- is udated data and i will get this data from req.body
+  const product = await productModel.findOneAndUpdate({ slug }, updateData, {
+    new: true,
+  });
+  if (!product) {
+    const error = createHttpError(
+      404,
+      `Product is not found with this slug: ${slug}`
+    );
+    throw error;
+  }
+  return product
+}

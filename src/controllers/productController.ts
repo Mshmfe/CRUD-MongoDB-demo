@@ -4,7 +4,7 @@ import slugify from "slugify";
 import { productModel } from "../models/productsSchema";
 import { productInput } from "../types";
 import { createHttpError } from "../utility/createError";
-import { deleteProductBySlug, findProductBySlug, getProduct } from "../services/productService";
+import { deleteProductBySlug, findProductBySlug, getProduct, updateProductServices } from "../services/productService";
 
 const getAllProduct = async (
   req: Request,
@@ -44,6 +44,7 @@ export const createSingleProduct = async (
     //i can just write req.body which means any data come from req.body i want to craete product based on this data
     //also product knows about the data in schema
     //check if the product exisist or not
+    console.log(req.file);
     const productExists = await productModel.exists({ name });
     if (productExists) {
       const error = createHttpError(
@@ -60,6 +61,7 @@ export const createSingleProduct = async (
       sold,
       quantity,
       category,
+      image :req.file?.path
     });
     //now i need to save my new product inside the database by use save function
     //maybe this process take some time so we need to used await
@@ -117,23 +119,9 @@ export const updateSingleProduct = async (
   next: NextFunction
 ) => {
   try {
-    if (req.body.name) {
-      //update the slug value
-      req.body.slug = slugify(req.body.name);
-    }
+   
     const { slug } = req.params;
-    const updateData: productInput = req.body;
-    //in this function i base 2 things 1- is id 2- is udated data and i will get this data from req.body
-    const product = await productModel.findOneAndUpdate({ slug }, updateData, {
-      new: true,
-    });
-    if (!product) {
-      const error = createHttpError(
-        404,
-        `Product is not found with this slug: ${slug}`
-      );
-      throw error;
-    }
+    const product= await updateProductServices(req,slug)
     res.json({
       message: " product is updated",
       payload: product,

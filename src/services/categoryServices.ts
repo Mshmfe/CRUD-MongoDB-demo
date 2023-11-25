@@ -8,7 +8,8 @@ export const getCategory=async()=>{
     const category = await categoryModel.find();
     return category
 };
-
+// the return type is the promise because we use async await
+//and inside the promise define the return type from this function ->in this case i try to return the interface ICategory 
 export const deleteCategory=async(slug:string):Promise<ICategory>=>{
     const category = await categoryModel.findOneAndDelete({ slug });
     if (!category) {
@@ -21,12 +22,12 @@ export const deleteCategory=async(slug:string):Promise<ICategory>=>{
 return category
 }
 
-export const getCategoryBySlug=async(slug:string):Promise<ICategory>=>{
-    const category = await categoryModel.findOne({ slug });
+export const getCategoryById=async(id:string):Promise<ICategory>=>{
+    const category = await categoryModel.findOne({ _id:id });
       if (!category) {
         const error = createHttpError(
           404,
-          `category is not found with this slug: ${slug}`
+          `category is not found with this id: ${id}`
         );
         throw error; 
       }  
@@ -47,7 +48,7 @@ export const updateSingleCategory=async(slug:string,req:Request):Promise<ICatego
        throw error;
      }return category
 }
-//not sure
+// !not sure
 export const createSingleCategory=async(name:string)=>{
     const categoryExists = await categoryModel.exists({ name });
     if (categoryExists) {
