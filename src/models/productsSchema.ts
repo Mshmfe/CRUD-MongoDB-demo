@@ -9,8 +9,13 @@ export interface IProduct extends Document {
   description: string;
   sold: number;
   quantity: number;
+  //insude the category schema idefine the id for category 
+  //and i use here to make relation ship between product and category
   category: ICategory["_id"];
   image: string;
+  createdAt?: string;
+  updatedAt?: string;
+  __v:number
 }
 export const productsSchema = new Schema(
   {
@@ -65,4 +70,5 @@ export const productsSchema = new Schema(
 // is like the collection when i create collection =>db.createCollection('products')
 //this collection "Products" will follow 1 schema called "productsSchema"
 //o will use this schema everywhere so we need to exported i will use this model when i want to make crud operation on products
+//and shoud be the schema know about the interface i created
 export const productModel = model<IProduct>("Products", productsSchema);

@@ -23,7 +23,7 @@ export const getProduct = async (page = 1, limit = 3) => {
   // to get all the product by use find function
   //populate('category') for get the information of category when i try get the product
   //populate the data from the category model
-  const products = await productModel.find().populate('category').skip(skip).limit(limit);
+  const products:IProduct[] = await productModel.find().populate('category').skip(skip).limit(limit);
   return {
     products,
     totalPage,

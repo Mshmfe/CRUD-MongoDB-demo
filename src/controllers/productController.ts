@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import slugify from "slugify";
 
-import { productModel } from "../models/productsSchema";
-import { productInput } from "../types";
+import { IProduct, productModel } from "../models/productsSchema";
 import { createHttpError } from "../utility/createError";
 import { deleteProductBySlug, findProductBySlug, getProduct, updateProductServices } from "../services/productService";
 
@@ -53,7 +52,7 @@ export const createSingleProduct = async (
       );
       throw error;
     }
-    const product = new productModel({
+    const product:IProduct = new productModel({
       name,
       price,
       slug: slugify(name),
@@ -132,3 +131,4 @@ export const updateSingleProduct = async (
 };
 
 export default getAllProduct;
+

@@ -5,7 +5,7 @@ import { ICategory, categoryModel } from "../models/categorySchema";
 import { createHttpError } from "../utility/createError";
 
 export const getCategory=async()=>{
-    const category = await categoryModel.find();
+    const category:ICategory[] = await categoryModel.find();
     return category
 };
 // the return type is the promise because we use async await
@@ -58,7 +58,7 @@ export const createSingleCategory=async(name:string)=>{
       );
       throw error;
     }
-    const category = new categoryModel({
+    const category:ICategory = new categoryModel({
       name,
       slug: slugify(name),
     })
