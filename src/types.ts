@@ -8,9 +8,8 @@ export type Product = {
   description: string;
   sold: number;
   quantity: number;
-  createdAt?:NativeDate;
-  updatedAt?:NativeDate;
-
+  createdAt?: NativeDate;
+  updatedAt?: NativeDate;
 };
 export type productInput = Omit<Product, " slug">;
 export interface Error {
@@ -21,24 +20,22 @@ export type Category = {
   _id: string;
   name: string;
   slug: string;
-  
-
 };
-export type EmailDataType={
-  email:string,
-  subject:string,
-  html:string
-}
+export type EmailDataType = {
+  email: string;
+  subject: string;
+  html: string;
+};
 export type categoryInput = Omit<Category, " _id">;
-export type userType={
-  name:string,
-  email:string,
-  password:string,
-  address:string,
-  phone:string,
-  image?:string
-}
+export type userType = {
+  name: string;
+  email: string;
+  password: string;
+  address: string;
+  phone: string;
+  image?: string;
+};
 
-export interface CusomRequest extends Request{
-  userId?:string,
+export interface CusomRequest extends Request {
+  userId?: string;
 }
