@@ -15,8 +15,10 @@ const getAllProduct = async (
     //for pagenation i need 2 thing 1- the limit 2-the page number
     let page = Number(req.query.page);
     const limit = Number(req.query.limit);
+    const search=req.query.search as string;
+    // console.log(search)
     //the service for get all the product
-   let{ products, totalPage, currentPage } = await getProduct(page, limit);
+   let{ products, totalPage, currentPage } = await getProduct(page, limit,search);
     res.json({
       message: "all product are returned",
       payload: {

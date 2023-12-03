@@ -7,7 +7,8 @@ import getAllProduct, {
   updateSingleProduct,
  
 } from "../controllers/productController";
-import { upload } from "../middleware/uplodeImage";
+import { uploadProduct } from "../middleware/uplodeImage";
+import { isAdmin, isLoggedIn } from "../middleware/auth";
 
 const router = Router();
 //GET->/products -> :for get all the product
@@ -18,11 +19,11 @@ router.get("/:slug", getSingleProduct);
 //when itry to create new product i want to upload image 
 //in this case i can use the multer as midleware
 //inside the single function put the name of the filed
-router.post("/", upload.single('image'),createSingleProduct);
+router.post("/", uploadProduct.single('image'),isLoggedIn,isAdmin,createSingleProduct);
 //DELETE->/products/:slug ->for delete single product
-router.delete("/:slug", deleteSingleProduct);
+router.delete("/:slug",isLoggedIn,isAdmin,deleteSingleProduct);
 //PUT->/products/:slug ->for update single product
-router.put("/:slug", updateSingleProduct);
+router.put("/:slug",isLoggedIn,isAdmin,updateSingleProduct);
 
 
 export default router;

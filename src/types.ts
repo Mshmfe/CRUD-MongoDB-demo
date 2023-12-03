@@ -1,3 +1,5 @@
+import { Request, request } from "express";
+
 export type Product = {
   _id: string;
   name: string;
@@ -22,4 +24,21 @@ export type Category = {
   
 
 };
+export type EmailDataType={
+  email:string,
+  subject:string,
+  html:string
+}
 export type categoryInput = Omit<Category, " _id">;
+export type userType={
+  name:string,
+  email:string,
+  password:string,
+  address:string,
+  phone:string,
+  image?:string
+}
+
+export interface CusomRequest extends Request{
+  userId?:string,
+}

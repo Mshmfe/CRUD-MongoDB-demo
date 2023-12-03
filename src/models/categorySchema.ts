@@ -24,3 +24,5 @@ const categorySchema = new Schema(
 );
 
 export const categoryModel = model<ICategory>("Category", categorySchema);
+
+//hash/hashsync and comparse
