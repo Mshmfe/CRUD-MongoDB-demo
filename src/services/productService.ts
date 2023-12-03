@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response } from "express";
+import slugify from "slugify";
+
 import { IProduct, productModel } from "../models/productsSchema";
 import { createHttpError } from "../utility/createError";
-import slugify from "slugify";
-import fs from "fs/promises";
 import { deleteImage } from "../helper/deleteImageHelper";
+
 //GET->get all the product
 export const getProduct = async (page = 1, limit = 3, search = "") => {
   //find how many product (document ) i have

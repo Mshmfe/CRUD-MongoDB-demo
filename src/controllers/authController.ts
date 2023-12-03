@@ -38,7 +38,7 @@ export const handleLogin = async (
     });
     //step 6 create the cookie to store some information about login
     res.cookie("access_token", accessToken, {
-      maxAge: 8* 60 * 1000, //8 minutes
+      maxAge: 8 * 60 * 1000, //8 minutes
       httpOnly: true,
       sameSite: "none",
     });

@@ -2,7 +2,6 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 import { dev } from "../config/server";
-import createJsonWebToken from "../helper/jwtHelper";
 import { handleSendEmail } from "../helper/sendEmail";
 import { IUser, userModel } from "../models/userSchema";
 import { createHttpError } from "../utility/createError";

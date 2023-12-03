@@ -1,10 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import jwt, {
-  JsonWebTokenError,
-  JwtPayload,
-  TokenExpiredError,
-} from "jsonwebtoken";
+import jwt, { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import mongoose from "mongoose";
 
 import { userModel } from "../models/userSchema";
 import { createHttpError } from "../utility/createError";
@@ -19,7 +16,6 @@ import {
   resetPasswordService,
   unbanUserById,
 } from "../services/userServices";
-import mongoose from "mongoose";
 import { userType } from "../types";
 import { deleteImage } from "../helper/deleteImageHelper";
 
@@ -275,9 +271,9 @@ export const forgetPassword = async (
     //step 1:get the email address from req.body
     const { email } = req.body;
     const token = await forgetPasswordService(email);
-    
+
     res.status(200).json({
-      message: 'Check your email to reset your password',
+      message: "Check your email to reset your password",
       payload: token,
     });
   } catch (error) {
@@ -295,9 +291,9 @@ export const resetPassword = async (
     //step 1:get the  password and the token from req.body
     const { token, password } = req.body;
     await resetPasswordService(token, password);
-    
+
     res.status(200).json({
-      message: 'Reset password was successful',
+      message: "Reset password was successful",
     });
   } catch (error) {
     next(error);

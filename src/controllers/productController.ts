@@ -3,7 +3,12 @@ import slugify from "slugify";
 
 import { IProduct, productModel } from "../models/productsSchema";
 import { createHttpError } from "../utility/createError";
-import { deleteProductBySlug, findProductBySlug, getProduct, updateProductServices } from "../services/productService";
+import {
+  deleteProductBySlug,
+  findProductBySlug,
+  getProduct,
+  updateProductServices,
+} from "../services/productService";
 
 const getAllProduct = async (
   req: Request,
@@ -15,10 +20,14 @@ const getAllProduct = async (
     //for pagenation i need 2 thing 1- the limit 2-the page number
     let page = Number(req.query.page);
     const limit = Number(req.query.limit);
-    const search=req.query.search as string;
+    const search = req.query.search as string;
     // console.log(search)
     //the service for get all the product
-   let{ products, totalPage, currentPage } = await getProduct(page, limit,search);
+    let { products, totalPage, currentPage } = await getProduct(
+      page,
+      limit,
+      search
+    );
     res.json({
       message: "all product are returned",
       payload: {
@@ -39,7 +48,7 @@ export const createSingleProduct = async (
 ) => {
   try {
     //get the data from req.body
-    const { name, price, description, sold, quantity,category  } = req.body;
+    const { name, price, description, sold, quantity, category } = req.body;
     //if i want to create new product i need name and price
     //now i create a new product with name and price
     //i can just write req.body which means any data come from req.body i want to craete product based on this data
@@ -54,7 +63,7 @@ export const createSingleProduct = async (
       );
       throw error;
     }
-    const product:IProduct = new productModel({
+    const product: IProduct = new productModel({
       name,
       price,
       slug: slugify(name),
@@ -62,7 +71,7 @@ export const createSingleProduct = async (
       sold,
       quantity,
       category,
-      image :req.file?.path
+      image: req.file?.path,
     });
     //now i need to save my new product inside the database by use save function
     //maybe this process take some time so we need to used await
@@ -87,7 +96,7 @@ export const getSingleProduct = async (
     // find the product from the database
     const { slug } = req.params;
     //service for get single product
-    const product = await findProductBySlug(slug)
+    const product = await findProductBySlug(slug);
     res.json({
       message: "single product are returend",
       paylaod: product,
@@ -120,9 +129,8 @@ export const updateSingleProduct = async (
   next: NextFunction
 ) => {
   try {
-   
     const { slug } = req.params;
-    const product= await updateProductServices(req,slug)
+    const product = await updateProductServices(req, slug);
     res.json({
       message: " product is updated",
       payload: product,
@@ -133,4 +141,3 @@ export const updateSingleProduct = async (
 };
 
 export default getAllProduct;
-

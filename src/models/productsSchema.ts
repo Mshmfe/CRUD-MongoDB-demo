@@ -9,17 +9,16 @@ export interface IProduct extends Document {
   description: string;
   sold: number;
   quantity: number;
-  //insude the category schema idefine the id for category 
+  //insude the category schema idefine the id for category
   //and i use here to make relation ship between product and category
   category: ICategory["_id"];
   image: string;
   createdAt?: string;
   updatedAt?: string;
-  __v:number
+  __v: number;
 }
 export const productsSchema = new Schema(
   {
-    
     name: {
       type: String,
       required: true,

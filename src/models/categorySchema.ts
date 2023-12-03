@@ -5,7 +5,7 @@ export interface ICategory extends Document {
   slug: string;
   createdAt?: string;
   updatedAt?: string;
-  __v:number
+  __v: number;
 }
 const categorySchema = new Schema(
   {
